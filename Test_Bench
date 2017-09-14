@@ -1,0 +1,26 @@
+module PWM_testbench(
+    );
+  reg Sensor;
+  reg CLK;
+  wire PWM;
+  
+  //INSTANTION
+  
+  Servo_Control UUT(CLK, Sensor,PWM);
+  
+  initial begin 
+  CLK = 0;
+  Sensor = 0;
+  #10;
+  Sensor = 1;
+  #300
+  Sensor = 0;
+  end
+  
+  always begin
+  #1 CLK = ~CLK;
+  end
+  
+  
+  
+endmodule
