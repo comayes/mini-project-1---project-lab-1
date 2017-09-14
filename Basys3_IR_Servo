@@ -1,0 +1,54 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineering Student: Alejandro Garcia Flores.
+// 
+// Create Date: 09/13/2017 04:36:42 PM
+// Design Name: 
+// Module Name: Servo_Control
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:   
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module Servo_Control(
+    input Sensor, // This comes from the IR sensor.
+    input CLK, // This is the internal clock from the basys 3.
+    output PWM // This is what drives the servo motor.
+    );
+    reg [20:0] Counter; // The counter is increments 
+    reg [20:0] Width; // The width sets the size of our PWM.
+    reg temp_PWM;    // This is how we modify the output.
+    
+    initial begin // Initializes all the values to zero.
+    Counter = 0;
+    Width = 0;
+    temp_PWM = 0;
+    end
+    
+    always@(posedge CLK) begin // Increments the Counter as every lock cycle.
+        Counter<= Counter + 1;
+        
+    if (Sensor == 0) // This sets our width based on the input from the sensor.
+        Width = 137000; // This sets our width to our 90% angle.
+    else
+        Width = 100000; // This sets our width to our 45% angle.
+    if (Counter < Width) // This generates the PWM by comparing the counter to width.
+        temp_PWM <= 1; // Output is 1 when the counter is less than the width.
+    else
+        temp_PWM <=0; // Output is 0 when the counter is greater than the width.
+    end
+    
+ assign PWM = temp_PWM; // This lets us control the output.
+ 
+    
+endmodule
